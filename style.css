@@ -352,6 +352,26 @@ body::before {
     z-index: 9999;
 }
 
+/* Zone invisible pour fermer le grimoire en cliquant autour */
+#book-close-area {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+/* Active la zone uniquement lorsque le grimoire est ouvert */
+body.scene-active #book-close-area {
+    pointer-events: auto;
+}
+
+/* Le grimoire reste au-dessus de la zone de fermeture */
+body.scene-active #book {
+    z-index: 3;
+}
+
 /* Une fois le décor quitté, la zone cliquable disparaît des interactions */
 body.scene-active #book-trigger {
     pointer-events: none;

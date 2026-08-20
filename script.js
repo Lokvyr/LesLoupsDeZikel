@@ -513,6 +513,8 @@ function closeBook() {
 
         cover.style.cursor = "pointer";
 
+        document.body.classList.remove("scene-active");
+
         isTurning = false;
 
     }, 800);
@@ -525,12 +527,21 @@ function closeBook() {
     bookTrigger.addEventListener("click", function () {
 
     // Démarrage de la musique d'ambiance
-    ambientMusic.currentTime = 0;
+    if (ambientMusic.paused) {
     ambientMusic.play();
+}
 
     // Lancement de la transition
     document.body.classList.add("scene-active");
 
+});
+
+    const bookCloseArea = document.getElementById("book-close-area");
+
+    bookCloseArea.addEventListener("click", function () {
+    if (!isOpen || isTurning) return;
+
+    closeBook();
 });
 
 // ========================================
@@ -553,3 +564,4 @@ for (let i = 0; i < 25; i++) {
 
     dustContainer.appendChild(dust);
 }
+
