@@ -539,7 +539,12 @@ function closeBook() {
     const bookCloseArea = document.getElementById("book-close-area");
 
     bookCloseArea.addEventListener("click", function () {
-    if (!isOpen || isTurning) return;
+    if (isTurning) return;
+
+    if (!isOpen) {
+        document.body.classList.remove("scene-active");
+        return;
+    }
 
     closeBook();
 });
