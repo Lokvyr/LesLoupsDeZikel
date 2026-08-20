@@ -1,0 +1,516 @@
+body {
+    margin: 0;
+
+    background: #111;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+
+/* Décor d'arrière-plan */
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background: url("assets/images/decor.jpg") center center / cover no-repeat;
+
+    opacity: 0;
+
+    animation: decorAppear 2.5s ease-out forwards;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+@keyframes decorAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#book {
+    position: relative;
+
+    width: min(90vw, 1300px);
+
+    max-width: 1300px;
+
+    aspect-ratio: 1536 / 1024;
+
+    perspective: 1800px;
+
+    z-index: 2;
+}
+#cover {
+    opacity: 1;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+                opacity 0.2s ease;
+}
+
+#cover:hover{
+
+    transform:scale(1.02);
+
+   filter: drop-shadow(0 12px 30px rgba(0,0,0,.45))
+           drop-shadow(0 0 18px rgba(255,220,150,.20));
+
+    cursor:pointer;
+
+}
+
+@keyframes breathe {
+
+    0%{
+
+        transform:translateY(0px);
+
+    }
+
+    50%{
+
+        transform:translateY(-6px);
+
+    }
+
+    100%{
+
+        transform:translateY(0px);
+
+    }
+
+}
+
+#cover.open {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: scale(1.02) rotateY(-180deg);
+}
+
+.page{
+    width:100%;
+    height:100%;
+    position:absolute;
+    inset:0;
+    object-fit:contain;
+    top:0;
+    left:0;
+    transition:0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    transform-style:preserve-3d;
+    transform-origin:left center;
+    backface-visibility:hidden;
+}
+
+#page1-left,
+#page2-left,
+#page3-left,
+#page1-right,
+#page2-right,
+#page3-right {
+    width:50%;
+    height:100%;
+    position:absolute;
+    top:0;
+    object-fit:fill;
+    inset:auto;
+}
+
+#page1-left,
+#page2-left,
+#page3-left {
+    left:0;
+    right:auto;
+    transform-origin:right center;
+}
+
+#page1-right,
+#page2-right,
+#page3-right {
+    right:0;
+    left:auto;
+    transform-origin:left center;
+}
+
+
+
+.hidden{
+
+    display:none;
+
+}
+
+.flip {
+    transform: rotateY(-180deg);
+}
+
+.flip-back {
+    transform: rotateY(180deg);
+}
+
+/* Indicateur pour tourner la page */
+#book::after {
+    content:"";
+    position:absolute;
+
+    right:8px;
+    top:50%;
+
+    width:5px;
+    height:120px;
+
+    border-radius:50%;
+
+    background:rgba(255,220,150,.65);
+
+    opacity:0;
+
+    transform:translateY(-50%) scaleY(.7);
+
+    box-shadow:0 0 12px rgba(255,220,150,.5);
+
+    transition:opacity .4s ease, transform .4s ease;
+
+    pointer-events:none;
+}
+
+/* Apparition au survol du grimoire */
+#book:hover::after {
+    opacity:1;
+
+    transform:translateY(-50%) scaleY(1);
+
+    animation:pageHint 1.5s ease-in-out infinite;
+}
+
+@keyframes pageHint {
+
+    0%,100% {
+        opacity:.35;
+        box-shadow:0 0 8px rgba(255,220,150,.3);
+    }
+
+    50% {
+        opacity:1;
+        box-shadow:0 0 20px rgba(255,220,150,.8);
+    }
+}
+
+#previousPage,
+#nextPage {
+    position:absolute;
+
+    top:0;
+
+    width:50%;
+    height:100%;
+
+    z-index:20;
+
+    background:transparent;
+
+    pointer-events:none;
+}
+
+#previousPage {
+    left:0;
+}
+
+#nextPage {
+    right:0;
+}
+
+#previousPage.active,
+#nextPage.active {
+    pointer-events:auto;
+    cursor:pointer;
+}
+
+/* ========================================
+   Lumières des bougies
+   ======================================== */
+
+/* MODE REPÉRAGE DES BOUGIES */
+.candle-glow {
+    position: fixed;
+
+    width: 240px;
+    height: 240px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+    circle,
+    rgba(255, 210, 100, 0.36) 0%,
+    rgba(255, 170, 60, 0.20) 30%,
+    rgba(255, 130, 30, 0.09) 55%,
+    transparent 75%
+);
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    animation: candleFlicker 2.4s ease-in-out infinite;
+}
+
+@keyframes candleFlicker {
+
+    0% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    25% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) scale(1.04);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.97);
+    }
+
+    75% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1.03);
+    }
+
+    100% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Bougie gauche */
+.candle-left {
+    left: 13%;
+    top: 53%;
+
+    transform: translate(-50%, -50%);
+}
+
+/* Grande bougie à droite */
+.candle-right-1 {
+    left: 86%;
+    top: 11%;
+
+    transform: translate(-50%, -50%);
+}
+
+/* Petite bougie à droite */
+.candle-right-2 {
+    left: 91%;
+    top: 27%;
+
+    transform: translate(-50%, -50%);
+}
+
+/* Première bougie à droite */
+.candle-right-3 {
+    left: 80%;
+    top: 20%;
+
+    transform: translate(-50%, -50%);
+}
+
+/* Désactivation de l'indicateur lumineux */
+#book::after {
+    display: none;
+}
+
+/* Zone cliquable du livre dans le décor */
+#book-trigger {
+    position: fixed;
+
+    left: 30%;
+    top: 41.2%;
+
+    width: 40%;
+    height: 52%;
+
+    cursor: pointer;
+
+    z-index: 9999;
+}
+
+/* Une fois le décor quitté, la zone cliquable disparaît des interactions */
+body.scene-active #book-trigger {
+    pointer-events: none;
+}
+
+/* Grimoire caché au démarrage */
+#book {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity 1s ease, visibility 0s linear 1s;
+}
+
+/* Le grimoire apparaît après le clic sur le livre du décor */
+body.scene-active #book {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    transition: opacity 1s ease;
+}
+
+/* ========================================
+   Voile de flou du décor
+   ======================================== */
+
+#scene-blur {
+    position: fixed;
+    inset: 0;
+
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition:
+        opacity 1s ease,
+        backdrop-filter 1s ease,
+        -webkit-backdrop-filter 1s ease;
+
+    z-index: 1;
+}
+
+/* Activation du flou après le clic */
+body.scene-active #scene-blur {
+    opacity: 1;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* ========================================
+   Deuxième décor : sans le livre
+   ======================================== */
+
+#scene-transition {
+    position: fixed;
+    inset: 0;
+
+    background-image: url("assets/images/decor-sans-livre.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 1.2s ease;
+
+    z-index: 0;
+}
+
+body.scene-active #scene-transition {
+    opacity: 1;
+}
+
+/* ========================================
+   Décor de transition — sans le livre
+   ======================================== */
+
+#scene-transition {
+    position: fixed;
+    inset: 0;
+
+    background-image: url("assets/images/decor-sans-livre.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity 1.2s ease;
+
+    z-index: 0;
+}
+
+body.scene-active #scene-transition {
+    opacity: 1;
+}
+
+/* ========================================
+   Particules de poussière
+   ======================================== */
+
+#dust-particles {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 1;
+
+    overflow: hidden;
+}
+
+.dust {
+    position: absolute;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 225, 160, 0.9);
+
+    box-shadow: 0 0 5px rgba(255, 210, 130, 0.6);
+
+    opacity: 0;
+
+    animation: dustFloat linear infinite;
+}
+
+@keyframes dustFloat {
+
+    0% {
+        opacity: 0;
+        transform: translate(0, 20px);
+    }
+
+    20% {
+    opacity: 0.8;
+}
+
+50% {
+    opacity: 1;
+    transform: translate(25px, -35px);
+}
+
+80% {
+    opacity: 0.6;
+}
+
+    100% {
+        opacity: 0;
+        transform: translate(-20px, -70px);
+    }
+}
